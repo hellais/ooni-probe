@@ -119,22 +119,22 @@ def runWithDirector():
         log.msg("Not reporting using a collector")
         collector = global_options['collector'] = None
 
-    try:
-        if global_options['testdeck']:
-            test_deck.loadDeck(global_options['testdeck'])
-        else:
-            log.debug("No test deck detected")
+    if global_options['testdeck']:
+        test_deck.loadDeck(global_options['testdeck'])
+    else:
+        log.debug("No test deck detected")
+        try:
             net_test_loader = NetTestLoader(global_options['subargs'],
                     test_file=global_options['test_file'])
             test_deck.insert(net_test_loader)
-    except MissingRequiredOption, option_name:
-        log.err('Missing required option: "%s"' % option_name)
-        print net_test_loader.usageOptions().getUsage()
-        sys.exit(2)
-    except usage.UsageError, e:
-        log.err(e)
-        print net_test_loader.usageOptions().getUsage()
-        sys.exit(2)
+        except MissingRequiredOption, option_name:
+            log.err('Missing required option: "%s"' % option_name)
+            print net_test_loader.usageOptions().getUsage()
+            sys.exit(2)
+        except usage.UsageError, e:
+            log.err(e)
+            print net_test_loader.usageOptions().getUsage()
+            sys.exit(2)
 
     def fetch_nettest_inputs(result):
         try: 
@@ -179,6 +179,8 @@ def runWithDirector():
                     collector = global_options['collector']
                 elif net_test_loader.options['collector']:
                     collector = net_test_loader.options['collector']
+                elif config.reports.collector:
+                    collector = config.reports.collector
 
             if collector and collector.startswith('httpo:') \
                     and (not (config.tor_state or config.tor.socks_port)):
