@@ -464,7 +464,8 @@ class Report(object):
         log.err("Failed to open %s reporter, giving up..." % reporter)
         log.err("Reporter %s failed, removing from report..." % reporter)
         #log.exception(failure)
-        self.reporters.remove(reporter)
+        # May already have been removed by another failing test
+        if reporter in self.reporters: self.reporters.remove(reporter)
         # Don't forward the exception unless there are no more reporters
         if len(self.reporters) == 0:
             log.err("Removed last reporter %s" % reporter)
