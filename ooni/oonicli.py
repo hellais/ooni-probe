@@ -146,7 +146,9 @@ def runWithDirector():
         log.err("Failed to start the director")
         r = failure.trap(errors.TorNotRunning,
                 errors.InvalidOONIBCollectorAddress,
-                errors.UnableToLoadDeckInput)
+                errors.UnableToLoadDeckInput,
+    		errors.ProbeIPUnknown)
+
         if r == errors.TorNotRunning:
             log.err("Tor does not appear to be running")
             log.err("Reporting with the collector %s is not possible" %
@@ -158,6 +160,8 @@ def runWithDirector():
             log.msg("for example: ooniprobe -c httpo://nkvphnp3p6agi5qq.onion")
         elif r == errors.UnableToLoadDeckInput:
             log.err('Missing required input files: %s' % failure)
+    	elif r == errors.ProbeIPUnknown:
+            log.err("Unable to determine probe IP")
         reactor.stop()
 
     # Wait until director has started up (including bootstrapping Tor)
