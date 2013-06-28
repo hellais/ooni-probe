@@ -6,7 +6,7 @@ import time
 import yaml
 import random
 
-from twisted.internet import reactor
+from twisted.internet import reactor, defer
 from twisted.python import usage
 from twisted.python.util import spewer
 
