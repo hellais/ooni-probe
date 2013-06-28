@@ -81,12 +81,19 @@ class TestDeck(object):
                 if os.path.exists(cachedPath) and verifyFile(cachedPath):
                         test_class.localOptions[inputArg] = cachedPath
                         continue
-                if m:
+                elif m:
                     downloadFile(inputFileURL, cachedPath)
                     if verifyFile(cachedPath):
                         test_class.localOptions[inputArg] = cachedPath
                         continue
-
+                    os.rename(cachedPath, cachedPath.bad)
+                else:
+                    # Input exists in the inputs directory and is not
+                    # referenced by a URL and does not have a filename
+                    # that matches its digest.
+                    if os.path.exists(cachedPath):
+                        test_class.localOptions[inputArg] = cachedPath
+                        continue
                 raise UnableToLoadDeckInput, cachedPath
 
 def test_verify_file_success(): 
