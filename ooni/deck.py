@@ -60,7 +60,6 @@ class TestDeck(object):
         for net_test_loader in self.netTestLoaders:
             self.fetchAndVerifyNetTestInput(net_test_loader)
 
-    @defer.inlineCallbacks
     def fetchAndVerifyNetTestInput(self, net_test_loader):
         """ fetch and verify a single NetTest's inputs """
         for test_class, test_methods in net_test_loader.testCases:
@@ -83,7 +82,7 @@ class TestDeck(object):
                         test_class.localOptions[inputArg] = cachedPath
                         continue
                 if m:
-                    yield downloadFile(inputFileURL, cachedPath)
+                    downloadFile(inputFileURL, cachedPath)
                     if verifyFile(cachedPath):
                         test_class.localOptions[inputArg] = cachedPath
                         continue
